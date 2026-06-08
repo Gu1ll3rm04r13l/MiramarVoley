@@ -75,3 +75,27 @@ describe("matchReportPlayer", () => {
     expect(matchReportPlayer({ num: 99, nombre: "Nadie" }, players)).toBeUndefined();
   });
 });
+
+import { pickNextMatch } from "@/lib/format";
+
+const mk = (id: string, fecha: string, estado: string) =>
+  ({ id, fecha, estado } as { id: string; fecha: string | null; estado: string | null });
+
+describe("pickNextMatch", () => {
+  const today = "2026-06-07";
+  it("picks earliest future match, ignoring a past pendiente", () => {
+    const ms = [mk("m08", "2026-06-06", "pendiente_resultado"), mk("m09", "2026-06-13", "proximo"), mk("m11", "2026-06-20", "proximo")];
+    expect(pickNextMatch(ms, today)?.id).toBe("m09");
+  });
+  it("returns most recent pendiente when no future matches exist", () => {
+    const ms = [mk("a", "2026-06-01", "pendiente_resultado"), mk("b", "2026-06-06", "pendiente_resultado")];
+    expect(pickNextMatch(ms, today)?.id).toBe("b");
+  });
+  it("falls back to earliest proximo when no future and no pendiente", () => {
+    const ms = [mk("z", "2026-05-01", "proximo")];
+    expect(pickNextMatch(ms, today)?.id).toBe("z");
+  });
+  it("returns null when there are no candidate matches", () => {
+    expect(pickNextMatch([mk("j", "2026-06-13", "jugado")], today)).toBeNull();
+  });
+});
