@@ -17,3 +17,20 @@ export function normalizeName(s: string): string {
 export function isMiramar(equipo: string, nombreEnTablas: string): boolean {
   return equipo.trim().toUpperCase() === nombreEnTablas.trim().toUpperCase();
 }
+
+export function normalizeClub(name: string, aliases: Map<string, string>): string {
+  const trimmed = name.trim();
+  return aliases.get(trimmed) ?? trimmed;
+}
+
+export function matchReportPlayer<T extends { nombre: string; numero_nuevo: number | null }>(
+  rp: { num: number | null; nombre: string },
+  players: T[],
+): T | undefined {
+  if (rp.num != null) {
+    const byNum = players.find((p) => p.numero_nuevo === rp.num);
+    if (byNum) return byNum;
+  }
+  const target = normalizeName(rp.nombre);
+  return players.find((p) => normalizeName(p.nombre) === target);
+}

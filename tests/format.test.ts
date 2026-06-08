@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { getDorsal } from "@/lib/format";
 import { isMiramar, normalizeName } from "@/lib/format";
+import { normalizeClub, matchReportPlayer } from "@/lib/format";
 
 const base = {
   id: "p", club_id: "miramar", nombre: "X", posicion: "Punta",
@@ -43,5 +44,34 @@ describe("normalizeName", () => {
   });
   it("collapses internal whitespace", () => {
     expect(normalizeName("  Ariel   Del  Fresno ")).toBe("ariel del fresno");
+  });
+});
+
+describe("normalizeClub", () => {
+  const aliases = new Map([
+    ["MIRAMAR", "MIRAMAR V"],
+    ["ATLE", "ATLE GESELL"],
+  ]);
+  it("maps a known alias to its canonical", () => {
+    expect(normalizeClub("MIRAMAR", aliases)).toBe("MIRAMAR V");
+  });
+  it("returns the original (trimmed) when no alias exists", () => {
+    expect(normalizeClub("  PEÑAROL ", aliases)).toBe("PEÑAROL");
+  });
+});
+
+describe("matchReportPlayer", () => {
+  const players = [
+    { id: "p08", nombre: "Guillermo Ariel del Fresno", numero_nuevo: 20 },
+    { id: "p03", nombre: "Nicolás Krasnopolski", numero_nuevo: 5 },
+  ];
+  it("matches by num === numero_nuevo even when names differ", () => {
+    expect(matchReportPlayer({ num: 20, nombre: "Ariel Del Fresno" }, players)?.id).toBe("p08");
+  });
+  it("falls back to normalized name when num is null", () => {
+    expect(matchReportPlayer({ num: null, nombre: "nicolas krasnopolski" }, players)?.id).toBe("p03");
+  });
+  it("returns undefined when nothing matches", () => {
+    expect(matchReportPlayer({ num: 99, nombre: "Nadie" }, players)).toBeUndefined();
   });
 });
