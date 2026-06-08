@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getDorsal } from "@/lib/format";
+import { isMiramar, normalizeName } from "@/lib/format";
 
 const base = {
   id: "p", club_id: "miramar", nombre: "X", posicion: "Punta",
@@ -21,5 +22,26 @@ describe("getDorsal", () => {
   });
   it("returns dash when numero_nuevo is null with usarNuevo true", () => {
     expect(getDorsal({ ...base, numero_actual: 12, numero_nuevo: null }, true)).toBe("—");
+  });
+});
+
+describe("isMiramar", () => {
+  it("matches exact nombre_en_tablas", () => {
+    expect(isMiramar("MIRAMAR V", "MIRAMAR V")).toBe(true);
+  });
+  it("matches ignoring surrounding whitespace and case", () => {
+    expect(isMiramar("  miramar v ", "MIRAMAR V")).toBe(true);
+  });
+  it("does not match other teams", () => {
+    expect(isMiramar("PEÑAROL", "MIRAMAR V")).toBe(false);
+  });
+});
+
+describe("normalizeName", () => {
+  it("strips accents and lowercases", () => {
+    expect(normalizeName("Nicolás Krasnopolski")).toBe("nicolas krasnopolski");
+  });
+  it("collapses internal whitespace", () => {
+    expect(normalizeName("  Ariel   Del  Fresno ")).toBe("ariel del fresno");
   });
 });
