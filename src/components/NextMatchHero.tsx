@@ -23,7 +23,7 @@ export default function NextMatchHero({
         </div>
         <div className="rounded-xl bg-navy/60 p-4">
           <p className="text-xs uppercase tracking-wide text-acero mb-2">Posición (Ascenso)</p>
-          <p className="font-display text-4xl font-bold">{posicion ? `${posicion}°` : "—"}</p>
+          <p className="font-display text-4xl font-bold">{posicion != null ? `${posicion}°` : "—"}</p>
           <Link href="/tabla" className="text-sm text-azul-bright mt-2 inline-block">Ver tabla →</Link>
         </div>
       </div>

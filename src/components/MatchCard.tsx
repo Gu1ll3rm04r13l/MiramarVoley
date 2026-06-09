@@ -32,5 +32,5 @@ export default function MatchCard({ match, hasReport }: { match: Match; hasRepor
       {played && hasReport && <p className="mt-2 text-xs text-azul-bright">Ver reporte →</p>}
     </div>
   );
-  return played ? <Link href={`/partido/${match.id}`} aria-label={`Detalle ${match.local} vs ${match.visitante}`}>{body}</Link> : body;
+  return played && hasReport ? <Link href={`/partido/${match.id}`} aria-label={`Detalle ${match.local} vs ${match.visitante}`}>{body}</Link> : body;
 }

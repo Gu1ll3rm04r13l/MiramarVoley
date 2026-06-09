@@ -8,7 +8,7 @@ export function getDorsal(player: Pick<Player, "numero_actual" | "numero_nuevo">
 export function normalizeName(s: string): string {
   return s
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/\s+/g, " ")
     .trim();
