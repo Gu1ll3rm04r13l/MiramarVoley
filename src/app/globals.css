@@ -14,19 +14,81 @@
   --font-body: var(--font-inter);
 }
 
+:root {
+  --grad-hero: radial-gradient(120% 90% at 50% 0%, #0686cd2e 0%, #0c2a4a 42%, #0a0c10 100%);
+  --glow-azul: 0 0 40px #0686cdaa, 0 0 10px #0686cd55;
+  --glow-azul-soft: 0 0 24px #0686cd55;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --hairline: 1px solid #a0a09c2e;
+}
+
 html { color-scheme: dark; }
 body {
   background-color: var(--color-negro);
   color: var(--color-hueso);
   font-family: var(--font-body), system-ui, sans-serif;
 }
-.font-display { font-family: var(--font-display), system-ui, sans-serif; }
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* ---- Utilidades cinematográficas ---- */
+.glass {
+  background: #0c2a4a66;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--hairline);
+}
+.surface { background: #0c2a4a99; border: var(--hairline); }
+.hairline { border: var(--hairline); }
+.glow { box-shadow: var(--glow-azul); }
+.glow-soft { box-shadow: var(--glow-azul-soft); }
+.grad-hero { background: var(--grad-hero); }
+
+/* ---- Keyframes ---- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 24px #0686cd55, 0 0 6px #0686cd33; }
+  50% { box-shadow: 0 0 44px #0686cdcc, 0 0 14px #0686cd66; }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ---- Reveal (activado por IntersectionObserver -> .in-view) ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--ease-out-soft), transform 0.6s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.in-view { opacity: 1; transform: translateY(0); }
+
+/* ---- Escudo glow pulsante ---- */
+.escudo-glow { animation: glow-pulse 4s var(--ease-out-soft) infinite; border-radius: 9999px; }
+
+/* ---- Shimmer placeholder ---- */
+.shimmer {
+  background: linear-gradient(100deg, #0c2a4a 30%, #143a5e 50%, #0c2a4a 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
 
 :focus-visible {
   outline: 2px solid var(--color-azul-bright);
   outline-offset: 2px;
   border-radius: 4px;
 }
+
 @media (prefers-reduced-motion: reduce) {
-  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .escudo-glow { box-shadow: var(--glow-azul-soft); }
 }
