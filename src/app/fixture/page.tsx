@@ -6,7 +6,8 @@ export const revalidate = 300;
 
 export default async function FixturePage() {
   const matches = await getMiramarMatches();
-  const { data: reports } = await supabase.from("match_reports").select("match_id");
+  const { data: reports, error: reportsErr } = await supabase.from("match_reports").select("match_id");
+  if (reportsErr) console.error("[fixture] match_reports fetch failed:", reportsErr.message);
   const reportMatchIds = (reports ?? []).map((r) => r.match_id).filter((x): x is string => !!x);
   return (
     <>
