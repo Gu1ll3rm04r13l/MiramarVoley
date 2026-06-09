@@ -47,3 +47,6 @@ next-env.d.ts
 docs/
 
 .superpowers/
+
+# Supabase schema/seed (internal, not published)
+/supabase/
