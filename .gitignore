@@ -45,3 +45,5 @@ next-env.d.ts
 
 # Internal planning docs (not published)
 docs/
+
+.superpowers/
