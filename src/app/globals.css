@@ -61,15 +61,15 @@ body {
   100% { background-position: 200% 0; }
 }
 
-/* ---- Reveal (activado por IntersectionObserver -> .in-view) ---- */
-.reveal {
+/* ---- Reveal (oculto solo cuando JS está listo; SSR/no-JS lo deja visible) ---- */
+.js-ready .reveal {
   opacity: 0;
   transform: translateY(16px);
   transition: opacity 0.6s var(--ease-out-soft), transform 0.6s var(--ease-out-soft);
   transition-delay: var(--reveal-delay, 0ms);
   will-change: opacity, transform;
 }
-.reveal.in-view { opacity: 1; transform: translateY(0); }
+.js-ready .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 /* ---- Escudo glow pulsante ---- */
 .escudo-glow { animation: glow-pulse 4s var(--ease-out-soft) infinite; border-radius: 9999px; }

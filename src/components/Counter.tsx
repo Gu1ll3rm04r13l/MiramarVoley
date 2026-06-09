@@ -21,6 +21,7 @@ export default function Counter({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    started.current = false;
 
     const prefersReduced =
       typeof window !== "undefined" &&
@@ -30,7 +31,6 @@ export default function Counter({
       return;
     }
 
-    setDisplay(0);
     const run = () => {
       if (started.current) return;
       started.current = true;
@@ -47,6 +47,7 @@ export default function Counter({
       (entries) => {
         for (const e of entries) {
           if (e.isIntersecting) {
+            setDisplay(0);
             run();
             io.disconnect();
           }
