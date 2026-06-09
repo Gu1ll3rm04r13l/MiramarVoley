@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Claude Code local config
 .claude/
+
+# Internal planning docs (not published)
+docs/
