@@ -99,3 +99,20 @@ describe("pickNextMatch", () => {
     expect(pickNextMatch([mk("j", "2026-06-13", "jugado")], today)).toBeNull();
   });
 });
+
+import { aggregateReportStats } from "@/lib/format";
+
+describe("aggregateReportStats", () => {
+  it("averages non-null values per fundamento and counts matches", () => {
+    const rows = [
+      { saq: 50, rec: null, ata: 88, bloq: 50, def: null, cata: 84, rating: 66 },
+      { saq: 56, rec: 75, ata: 46, bloq: 50, def: null, cata: 72, rating: 60 },
+    ];
+    const r = aggregateReportStats(rows);
+    expect(r.partidos).toBe(2);
+    expect(r.saq).toBe(53); // (50+56)/2
+    expect(r.rec).toBe(75); // only one non-null
+    expect(r.def).toBeNull(); // all null
+    expect(r.rating).toBe(63);
+  });
+});

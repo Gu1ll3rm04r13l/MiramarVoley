@@ -35,6 +35,19 @@ export function matchReportPlayer<T extends { nombre: string; numero_nuevo: numb
   return players.find((p) => normalizeName(p.nombre) === target);
 }
 
+type StatRow = { saq: number | null; rec: number | null; ata: number | null; bloq: number | null; def: number | null; cata: number | null; rating: number | null };
+export type AggStats = { partidos: number } & { [K in keyof StatRow]: number | null };
+
+export function aggregateReportStats(rows: StatRow[]): AggStats {
+  const keys: (keyof StatRow)[] = ["saq", "rec", "ata", "bloq", "def", "cata", "rating"];
+  const out = { partidos: rows.length } as AggStats;
+  for (const k of keys) {
+    const vals = rows.map((r) => r[k]).filter((v): v is number => v != null);
+    out[k] = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
+  }
+  return out;
+}
+
 type NextMatchLike = { fecha: string | null; estado: string | null };
 
 export function pickNextMatch<T extends NextMatchLike>(matches: T[], today: string): T | null {
