@@ -1,4 +1,5 @@
 import PlantelGrid from "@/components/PlantelGrid";
+import PageHeading from "@/components/PageHeading";
 import { getPlayers, getAppConfig, getAllReportPlayers } from "@/lib/queries";
 
 export const revalidate = 300;
@@ -10,7 +11,7 @@ export default async function PlantelPage() {
   // buena_fe already ordered last via `orden`; keep DB order.
   return (
     <>
-      <h1 className="font-display text-3xl font-bold mb-5">Plantel</h1>
+      <PageHeading kicker="El equipo" title="Plantel" />
       <PlantelGrid players={players} usarNuevo={config.usar_numero_nuevo ?? false} reportPlayers={reportPlayers} />
     </>
   );
