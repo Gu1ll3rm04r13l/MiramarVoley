@@ -1,4 +1,5 @@
 import StandingsTable from "@/components/StandingsTable";
+import PageHeading from "@/components/PageHeading";
 import { getStandings, getDivisions } from "@/lib/queries";
 import { getClub } from "@/lib/queries-club";
 
@@ -14,7 +15,7 @@ export default async function TablaPage() {
   const actualizado = (id: string) => divisions.find((d) => d.id === id)?.actualizado ?? null;
   return (
     <>
-      <h1 className="font-display text-3xl font-bold mb-5">Tabla de posiciones</h1>
+      <PageHeading kicker="Clasificación" title="Tabla de posiciones" />
       <StandingsTable
         ascenso={ascenso} top8={top8} nombreEnTablas={nombreEnTablas}
         actualizadoAscenso={actualizado("ascenso")} actualizadoTop8={actualizado("top8")}

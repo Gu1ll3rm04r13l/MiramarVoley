@@ -14,19 +14,211 @@
   --font-body: var(--font-inter);
 }
 
+:root {
+  --glow-azul: 0 0 40px #0686cdaa, 0 0 10px #0686cd55;
+  --glow-azul-soft: 0 0 24px #0686cd55;
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --hairline: 1px solid #a0a09c2e;
+}
+
 html { color-scheme: dark; }
 body {
   background-color: var(--color-negro);
   color: var(--color-hueso);
   font-family: var(--font-body), system-ui, sans-serif;
 }
-.font-display { font-family: var(--font-display), system-ui, sans-serif; }
+.font-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+}
+
+/* Titular gigante de impacto */
+.display-xl {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+.kicker {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--color-azul-bright);
+}
+.text-glow-azul {
+  background: linear-gradient(180deg, #f2f3ef 0%, #cfe6f6 55%, #6cb6e6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Superficies ---- */
+.glass {
+  background: #0c2a4a66;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: var(--hairline);
+}
+.surface { background: #0c2a4a99; border: var(--hairline); }
+.hairline { border: var(--hairline); }
+.glow { box-shadow: var(--glow-azul); }
+.glow-soft { box-shadow: var(--glow-azul-soft); }
+
+/* ---- Atmósfera del hero (mesh + aurora + grano) ---- */
+.hero-bg {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(70% 55% at 50% 0%, #0686cd3d 0%, transparent 60%),
+    radial-gradient(45% 40% at 82% 18%, #065fa733 0%, transparent 55%),
+    radial-gradient(60% 60% at 16% 24%, #0c2a4a99 0%, transparent 60%),
+    linear-gradient(180deg, #0c2a4a 0%, #0a1320 55%, #07090d 100%);
+}
+.hero-bg::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  z-index: -1;
+  background:
+    radial-gradient(38% 50% at 30% 30%, #0686cd2e, transparent 70%),
+    radial-gradient(40% 50% at 72% 60%, #1565a32e, transparent 70%);
+  filter: blur(28px);
+  animation: aurora 16s ease-in-out infinite alternate;
+}
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+}
+
+/* Línea de cancha luminosa (acento decorativo) */
+.court-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: min(560px, 76%);
+  height: 100%;
+  transform: translateX(-50%);
+  z-index: -1;
+  pointer-events: none;
+  border-left: 1px solid #0686cd1f;
+  border-right: 1px solid #0686cd1f;
+}
+.court-line::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 38%;
+  border-top: 1px solid #0686cd24;
+}
+
+/* ---- Keyframes ---- */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes halo-pulse {
+  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes aurora {
+  0% { transform: translate3d(-4%, -2%, 0) rotate(0deg); }
+  100% { transform: translate3d(4%, 3%, 0) rotate(8deg); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes sweep {
+  0% { transform: translateX(-120%) skewX(-12deg); }
+  60%, 100% { transform: translateX(220%) skewX(-12deg); }
+}
+
+/* Escudo: flota + halo radial pulsante detrás */
+.escudo-wrap { position: relative; display: inline-block; }
+.escudo-wrap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 240%;
+  height: 240%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+  border-radius: 9999px;
+  background: radial-gradient(closest-side, #0686cd88, #0686cd22 55%, transparent 72%);
+  animation: halo-pulse 4.5s var(--ease-out-soft) infinite;
+}
+.escudo-float { animation: float 6s var(--ease-out-soft) infinite; border-radius: 9999px; }
+
+/* CTA con barrido de luz al hover */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #0686cd, #065fa7);
+  color: #f2f3ef;
+  font-weight: 600;
+  box-shadow: 0 8px 24px #065fa755;
+  transition: transform 0.25s var(--ease-out-soft), box-shadow 0.25s var(--ease-out-soft);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px #065fa777; }
+.btn-primary::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #ffffff55, transparent);
+}
+.btn-primary:hover::after { animation: sweep 0.9s ease forwards; }
+.btn-ghost {
+  border-radius: 9999px;
+  border: 1px solid #a0a09c40;
+  color: #f2f3ef;
+  font-weight: 500;
+  transition: border-color 0.25s, background-color 0.25s, transform 0.25s var(--ease-out-soft);
+}
+.btn-ghost:hover { border-color: #0686cd; background: #0686cd1a; transform: translateY(-2px); }
+
+/* ---- Shimmer placeholder ---- */
+.shimmer {
+  background: linear-gradient(100deg, #0c2a4a 30%, #143a5e 50%, #0c2a4a 70%);
+  background-size: 200% 100%;
+  animation: shimmer 1.8s linear infinite;
+}
+
+/* ---- Reveal (oculto solo cuando JS está listo; SSR/no-JS lo deja visible) ---- */
+.js-ready .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s var(--ease-out-soft), transform 0.7s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.js-ready .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 :focus-visible {
   outline: 2px solid var(--color-azul-bright);
   outline-offset: 2px;
   border-radius: 4px;
 }
+
 @media (prefers-reduced-motion: reduce) {
-  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+  .reveal { opacity: 1 !important; transform: none !important; }
+  .hero-bg::before, .escudo-wrap::before { animation: none !important; }
 }

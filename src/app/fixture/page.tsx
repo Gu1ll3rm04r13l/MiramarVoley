@@ -1,4 +1,5 @@
 import FixtureList from "@/components/FixtureList";
+import PageHeading from "@/components/PageHeading";
 import { getMiramarMatches } from "@/lib/queries";
 import { supabase } from "@/lib/supabase";
 
@@ -11,7 +12,7 @@ export default async function FixturePage() {
   const reportMatchIds = (reports ?? []).map((r) => r.match_id).filter((x): x is string => !!x);
   return (
     <>
-      <h1 className="font-display text-3xl font-bold mb-5">Fixture y resultados</h1>
+      <PageHeading kicker="Calendario" title="Fixture y resultados" />
       <FixtureList matches={matches} reportMatchIds={reportMatchIds} />
     </>
   );
