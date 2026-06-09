@@ -115,4 +115,13 @@ describe("aggregateReportStats", () => {
     expect(r.def).toBeNull(); // all null
     expect(r.rating).toBe(63);
   });
+  it("excludes matches where the player did not play (all stats null)", () => {
+    const rows = [
+      { saq: 50, rec: null, ata: 88, bloq: 50, def: null, cata: 84, rating: 66 },
+      { saq: null, rec: null, ata: null, bloq: null, def: null, cata: null, rating: null },
+    ];
+    const r = aggregateReportStats(rows);
+    expect(r.partidos).toBe(1);
+    expect(r.saq).toBe(50);
+  });
 });

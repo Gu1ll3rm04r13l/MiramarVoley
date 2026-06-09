@@ -18,6 +18,11 @@ export function isMiramar(equipo: string, nombreEnTablas: string): boolean {
   return equipo.trim().toUpperCase() === nombreEnTablas.trim().toUpperCase();
 }
 
+// Detecta si un equipo es Miramar en cualquier variante ("MIRAMAR V", "MIRAMAR V.", "MIRAMAR VOLEY").
+export function esMiramar(equipo: string | null | undefined): boolean {
+  return !!equipo && /miramar/i.test(equipo);
+}
+
 export function normalizeClub(name: string, aliases: Map<string, string>): string {
   const trimmed = name.trim();
   return aliases.get(trimmed) ?? trimmed;
@@ -35,14 +40,18 @@ export function matchReportPlayer<T extends { nombre: string; numero_nuevo: numb
   return players.find((p) => normalizeName(p.nombre) === target);
 }
 
-type StatRow = { saq: number | null; rec: number | null; ata: number | null; bloq: number | null; def: number | null; cata: number | null; rating: number | null };
-export type AggStats = { partidos: number } & { [K in keyof StatRow]: number | null };
+type StatRow = { saq: number | null; rec: number | null; ata: number | null; bloq: number | null; def: number | null; cata: number | null; rating: number | null; mas_menos?: number | null };
+export type AggStats = { partidos: number; masMenos: number } & { [K in Exclude<keyof StatRow, "mas_menos">]: number | null };
 
 export function aggregateReportStats(rows: StatRow[]): AggStats {
-  const keys: (keyof StatRow)[] = ["saq", "rec", "ata", "bloq", "def", "cata", "rating"];
-  const out = { partidos: rows.length } as AggStats;
+  const keys = ["saq", "rec", "ata", "bloq", "def", "cata", "rating"] as const;
+  const played = rows.filter((r) => keys.some((k) => r[k] != null));
+  const out = {
+    partidos: played.length,
+    masMenos: played.reduce((a, r) => a + (r.mas_menos ?? 0), 0),
+  } as AggStats;
   for (const k of keys) {
-    const vals = rows.map((r) => r[k]).filter((v): v is number => v != null);
+    const vals = played.map((r) => r[k]).filter((v): v is number => v != null);
     out[k] = vals.length ? Math.round(vals.reduce((a, b) => a + b, 0) / vals.length) : null;
   }
   return out;

@@ -2,16 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/Reveal";
 import Counter from "@/components/Counter";
+import { esMiramar } from "@/lib/format";
 import type { Match } from "@/lib/types";
 
 export default function NextMatchHero({
-  objetivo,
   next,
   posicion,
+  totalEquipos,
 }: {
-  objetivo: string;
   next: Match | null;
   posicion: number | null;
+  totalEquipos: number;
 }) {
   return (
     <section className="hero-bg relative overflow-hidden rounded-3xl border border-acero/15 px-5 py-14 sm:px-10 sm:py-20 min-h-[calc(100svh-7rem)] flex flex-col items-center justify-center text-center">
@@ -37,15 +38,6 @@ export default function NextMatchHero({
         <span className="block text-hueso/90 text-3xl sm:text-5xl md:text-6xl mt-1">CLUB DE VÓLEY</span>
       </Reveal>
 
-      {objetivo && (
-        <Reveal delay={220}>
-          <span className="mt-6 inline-flex items-center gap-2 rounded-full glass px-4 py-1.5 text-sm text-azul-bright">
-            <span className="h-1.5 w-1.5 rounded-full bg-azul-bright shadow-[0_0_8px_#0686cd]" />
-            {objetivo}
-          </span>
-        </Reveal>
-      )}
-
       <Reveal delay={290} className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <Link href="/fixture" className="btn-primary px-6 py-3 text-sm">Ver fixture</Link>
         <Link href="/tabla" className="btn-ghost px-6 py-3 text-sm">Ver tabla</Link>
@@ -57,7 +49,11 @@ export default function NextMatchHero({
           <p className="kicker !text-acero !tracking-[0.2em] mb-3">Próximo partido</p>
           {next ? (
             <>
-              <p className="font-display text-2xl font-bold leading-tight">{next.local} <span className="text-acero font-normal">vs</span> {next.visitante}</p>
+              <p className="font-display text-xl font-bold leading-tight">
+                <span className={esMiramar(next.local) ? "text-glow-mv" : ""}>{next.local}</span>
+                <span className="text-acero font-normal"> vs </span>
+                <span className={esMiramar(next.visitante) ? "text-glow-mv" : ""}>{next.visitante}</span>
+              </p>
               <p className="text-sm text-acero mt-2">
                 {next.jornada} · {next.fecha}{next.hora ? ` · ${next.hora.slice(0, 5)}` : ""}
               </p>
@@ -78,7 +74,12 @@ export default function NextMatchHero({
             ) : (
               <span className="display-xl text-6xl leading-none">—</span>
             )}
-            <span className="text-acero text-sm mb-1.5">en la tabla</span>
+            <span className="flex flex-col mb-1.5 leading-tight">
+              {posicion != null && totalEquipos > 0 && (
+                <span className="text-acero/70 text-base font-medium tabular-nums">/{totalEquipos}</span>
+              )}
+              <span className="text-acero text-sm">en la tabla</span>
+            </span>
           </div>
         </Reveal>
       </div>

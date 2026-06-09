@@ -1,4 +1,5 @@
 import StatBar from "@/components/StatBar";
+import MvpCard from "@/components/MvpCard";
 import type { Match, MatchReport as Report, ReportPlayer } from "@/lib/types";
 
 type SetScore = { set: number; local: number; visitante: number };
@@ -21,6 +22,15 @@ export default function MatchReport({ match, report, players }: { match: Match; 
           ))}
         </div>
       </header>
+
+      {report.mvp_nombre && (
+        <MvpCard
+          nombre={report.mvp_nombre}
+          posicion={report.mvp_posicion}
+          num={report.mvp_num}
+          foto={report.mvp_foto}
+        />
+      )}
 
       <section className="grid gap-3 sm:grid-cols-3">
         {([["MVP", d.mejorRendimiento], ["Menor", d.menorRendimiento], ["Mejor sacador", d.mejorSacador]] as const).map(([label, dd]) => (

@@ -55,6 +55,11 @@ export interface ReportDraft {
     menorRendimiento: { jugador: string; num: number | null; rating: number | null } | null;
     mejorSacador: { jugador: string; num: number | null; saque: number | null } | null;
   };
+  // Jugador del partido (MVP) editable a mano. Opcional: el parser de PDF no lo provee.
+  mvp_nombre?: string | null;
+  mvp_posicion?: string | null;
+  mvp_num?: number | null;
+  mvp_foto?: string | null;
   jugadores: ReportPlayerDraft[];
 }
 

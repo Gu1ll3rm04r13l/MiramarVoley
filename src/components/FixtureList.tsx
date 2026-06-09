@@ -13,9 +13,27 @@ const FILTERS: { v: Filter; label: string }[] = [
   { v: "proximo", label: "Próximos" },
 ];
 
+const jornadaNum = (j: string | null) => {
+  const n = j?.match(/\d+/)?.[0];
+  return n ? parseInt(n, 10) : Number.MAX_SAFE_INTEGER;
+};
+
 export default function FixtureList({ matches, reportMatchIds }: { matches: Match[]; reportMatchIds: string[] }) {
   const [f, setF] = useState<Filter>("todos");
-  const shown = f === "todos" ? matches : matches.filter((m) => m.estado === f);
+
+  // Solo el partido futuro de fecha más cercana queda "Próximo"; el resto pasa a "Pendiente".
+  const nextId = matches
+    .filter((m) => m.estado === "proximo" && m.fecha)
+    .sort((a, b) => (a.fecha ?? "").localeCompare(b.fecha ?? ""))[0]?.id;
+  const normalized = matches.map((m) =>
+    m.estado === "proximo" && m.id !== nextId ? { ...m, estado: "pendiente_resultado" } : m
+  );
+
+  const ordered = [...normalized].sort((a, b) => {
+    const d = jornadaNum(a.jornada) - jornadaNum(b.jornada);
+    return d !== 0 ? d : (a.fecha ?? "").localeCompare(b.fecha ?? "");
+  });
+  const shown = f === "todos" ? ordered : ordered.filter((m) => m.estado === f);
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-4">

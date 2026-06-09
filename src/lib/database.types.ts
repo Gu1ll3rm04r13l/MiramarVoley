@@ -119,6 +119,10 @@ export type Database = {
           fundamentos: Json | null
           id: string
           match_id: string | null
+          mvp_foto: string | null
+          mvp_nombre: string | null
+          mvp_num: number | null
+          mvp_posicion: string | null
           resultado_por_set: Json | null
           rival_errores: number | null
           rival_nombre: string | null
@@ -138,6 +142,10 @@ export type Database = {
           fundamentos?: Json | null
           id: string
           match_id?: string | null
+          mvp_foto?: string | null
+          mvp_nombre?: string | null
+          mvp_num?: number | null
+          mvp_posicion?: string | null
           resultado_por_set?: Json | null
           rival_errores?: number | null
           rival_nombre?: string | null
@@ -157,6 +165,10 @@ export type Database = {
           fundamentos?: Json | null
           id?: string
           match_id?: string | null
+          mvp_foto?: string | null
+          mvp_nombre?: string | null
+          mvp_num?: number | null
+          mvp_posicion?: string | null
           resultado_por_set?: Json | null
           rival_errores?: number | null
           rival_nombre?: string | null

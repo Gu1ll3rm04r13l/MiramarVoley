@@ -53,6 +53,10 @@ export async function saveReport(matchId: string, draft: ReportDraft): Promise<A
     resultado_por_set: draft.resultado_por_set,
     fundamentos: draft.fundamentos,
     destacados: draft.destacados,
+    mvp_nombre: draft.mvp_nombre ?? null,
+    mvp_posicion: draft.mvp_posicion ?? null,
+    mvp_num: draft.mvp_num ?? null,
+    mvp_foto: draft.mvp_foto ?? null,
   });
   if (rErr) return { ok: false, error: rErr.message };
 

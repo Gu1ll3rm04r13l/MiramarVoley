@@ -24,7 +24,17 @@ export default function PlayerModal({ player, dorsal, stats, onClose }: { player
           </div>
           <button ref={closeRef} type="button" onClick={onClose} aria-label="Cerrar" className="text-acero hover:text-hueso text-2xl leading-none">×</button>
         </div>
-        <p className="text-xs text-acero mt-4 mb-2">Promedios ({stats.partidos} {stats.partidos === 1 ? "partido" : "partidos"})</p>
+        <div className="flex items-center justify-between mt-4 mb-2">
+          <p className="text-xs text-acero">Promedios ({stats.partidos} {stats.partidos === 1 ? "partido" : "partidos"})</p>
+          {stats.partidos > 0 && (
+            <p className="text-xs text-acero">
+              +/-{" "}
+              <span className={`font-semibold tabular-nums ${stats.masMenos > 0 ? "text-azul-bright" : stats.masMenos < 0 ? "text-red-400" : "text-hueso"}`}>
+                {stats.masMenos > 0 ? `+${stats.masMenos}` : stats.masMenos}
+              </span>
+            </p>
+          )}
+        </div>
         <div className="space-y-2">
           <StatBar label="Saque" value={stats.saq} />
           <StatBar label="Recepción" value={stats.rec} />

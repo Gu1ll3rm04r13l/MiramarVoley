@@ -9,6 +9,7 @@ export function emptyDraft(): ReportDraft {
     resultado_por_set: [],
     fundamentos: { ataque: null, recepcion: null, saque: null, bloqueo: null, defensa: null, contraataque: null },
     destacados: { mejorRendimiento: null, menorRendimiento: null, mejorSacador: null },
+    mvp_nombre: null, mvp_posicion: null, mvp_num: null, mvp_foto: null,
     jugadores: [],
   };
 }
@@ -27,6 +28,7 @@ export function draftFromReport(report: MatchReport, players: ReportPlayer[], ma
     resultado_por_set: (report.resultado_por_set as unknown as ReportDraft["resultado_por_set"]) ?? [],
     fundamentos: (report.fundamentos as unknown as ReportDraft["fundamentos"]) ?? emptyDraft().fundamentos,
     destacados: (report.destacados as unknown as ReportDraft["destacados"]) ?? emptyDraft().destacados,
+    mvp_nombre: report.mvp_nombre, mvp_posicion: report.mvp_posicion, mvp_num: report.mvp_num, mvp_foto: report.mvp_foto,
     jugadores: players.map((p) => ({
       num: p.num, nombre: p.nombre ?? "", saq: p.saq, rec: p.rec, ata: p.ata, bloq: p.bloq,
       def: p.def, cata: p.cata, err: p.err, mas_menos: p.mas_menos, rating: p.rating,

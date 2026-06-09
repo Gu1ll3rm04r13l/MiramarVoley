@@ -101,7 +101,11 @@ create table if not exists match_reports (
   rival_errores      int,
   resultado_por_set  jsonb,   -- [{set,local,visitante}]
   fundamentos        jsonb,   -- {ataque,recepcion,saque,bloqueo,defensa,contraataque}
-  destacados         jsonb    -- {mejorRendimiento, menorRendimiento, mejorSacador}
+  destacados         jsonb,   -- {mejorRendimiento, menorRendimiento, mejorSacador}
+  mvp_nombre         text,    -- Jugador del partido (editable a mano)
+  mvp_posicion       text,
+  mvp_num            int,
+  mvp_foto           text
 );
 
 create table if not exists report_players (
