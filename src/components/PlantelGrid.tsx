@@ -17,7 +17,7 @@ export default function PlantelGrid({ players, usarNuevo, reportPlayers }: { pla
     <>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {players.map((p, i) => (
-          <Reveal key={p.id} delay={Math.min(i, 9) * 50}>
+          <Reveal key={p.id} delay={Math.min(i, 9) * 50} className="h-full">
             <PlayerCard player={p} dorsal={getDorsal(p, usarNuevo)} onClick={() => setOpen(p)} />
           </Reveal>
         ))}

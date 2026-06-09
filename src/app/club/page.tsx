@@ -20,10 +20,7 @@ export default async function ClubPage() {
       </Reveal>
 
       <Reveal delay={120} as="section" className="glass rounded-2xl p-6 mt-6">
-        <p className="text-lg">
-          Temporada {config.temporada}. Objetivo:{" "}
-          <span className="text-azul-bright font-medium">{config.objetivo}</span>.
-        </p>
+        <p className="text-lg">Temporada {config.temporada}.</p>
       </Reveal>
 
       <Reveal delay={200} as="section" className="surface rounded-2xl p-6 mt-4">

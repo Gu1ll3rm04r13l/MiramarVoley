@@ -6,7 +6,7 @@ export default function PlayerCard({ player, dorsal, onClick }: { player: Player
     <button
       type="button"
       onClick={onClick}
-      className="group text-left w-full rounded-xl surface p-4 transition-all duration-300 hover:-translate-y-1 hover:border-azul/60 hover:glow-soft"
+      className="group h-full text-left w-full rounded-xl surface p-4 transition-all duration-300 hover:-translate-y-1 hover:border-azul/60 hover:glow-soft"
     >
       <div className="flex items-center gap-3">
         <div className="relative w-14 h-14 rounded-full overflow-hidden bg-navy shrink-0 grid place-items-center">
@@ -27,9 +27,6 @@ export default function PlayerCard({ player, dorsal, onClick }: { player: Player
           <p className="text-xs text-acero">{player.posicion}</p>
         </div>
       </div>
-      {player.estado === "buena_fe" && (
-        <span className="mt-3 inline-block text-xs rounded-full px-2 py-0.5 bg-acero/20 text-acero">En lista</span>
-      )}
     </button>
   );
 }
