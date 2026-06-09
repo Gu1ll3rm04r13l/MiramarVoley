@@ -3,6 +3,7 @@
 import { useState } from "react";
 import PlayerCard from "@/components/PlayerCard";
 import PlayerModal from "@/components/PlayerModal";
+import Reveal from "@/components/Reveal";
 import { getDorsal, matchReportPlayer, aggregateReportStats } from "@/lib/format";
 import type { Player, ReportPlayer } from "@/lib/types";
 
@@ -15,8 +16,10 @@ export default function PlantelGrid({ players, usarNuevo, reportPlayers }: { pla
   return (
     <>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {players.map((p) => (
-          <PlayerCard key={p.id} player={p} dorsal={getDorsal(p, usarNuevo)} onClick={() => setOpen(p)} />
+        {players.map((p, i) => (
+          <Reveal key={p.id} delay={Math.min(i, 9) * 50}>
+            <PlayerCard player={p} dorsal={getDorsal(p, usarNuevo)} onClick={() => setOpen(p)} />
+          </Reveal>
         ))}
       </div>
       {open && (
