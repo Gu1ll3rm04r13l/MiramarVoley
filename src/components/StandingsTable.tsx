@@ -25,7 +25,7 @@ export default function StandingsTable({
       </div>
       <div className="overflow-x-auto rounded-lg border border-acero/20">
         <table className="w-full text-sm">
-          <thead className="bg-navy text-acero">
+          <thead className="sticky top-14 z-10 bg-navy/95 backdrop-blur text-acero">
             <tr className="text-left">
               <th className="px-2 py-2">#</th>
               <th className="px-2 py-2">Equipo</th>
@@ -43,7 +43,12 @@ export default function StandingsTable({
             {rows.map((r) => {
               const mine = isMiramar(r.equipo, nombreEnTablas);
               return (
-                <tr key={r.id} className={`border-t border-acero/10 ${mine ? "bg-azul/25 font-semibold" : ""}`}>
+                <tr
+                  key={r.id}
+                  className={`border-t border-acero/10 transition-colors hover:bg-azul/10 ${
+                    mine ? "bg-azul/25 font-semibold shadow-[inset_3px_0_0_0_var(--color-azul-bright)]" : ""
+                  }`}
+                >
                   <td className="px-2 py-2 tabular-nums">{r.pos}</td>
                   <td className="px-2 py-2 whitespace-nowrap">{r.equipo}</td>
                   <td className="px-2 py-2 text-center tabular-nums">{r.pj}</td>
