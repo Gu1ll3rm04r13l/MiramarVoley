@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import MatchCard from "@/components/MatchCard";
+import Reveal from "@/components/Reveal";
 import type { Match } from "@/lib/types";
 
 type Filter = "todos" | "jugado" | "pendiente_resultado" | "proximo";
@@ -26,7 +27,11 @@ export default function FixtureList({ matches, reportMatchIds }: { matches: Matc
         ))}
       </div>
       <div className="grid gap-3 sm:grid-cols-2">
-        {shown.map((m) => <MatchCard key={m.id} match={m} hasReport={reportMatchIds.includes(m.id)} />)}
+        {shown.map((m, i) => (
+          <Reveal key={m.id} delay={Math.min(i, 8) * 60}>
+            <MatchCard match={m} hasReport={reportMatchIds.includes(m.id)} />
+          </Reveal>
+        ))}
       </div>
     </div>
   );
