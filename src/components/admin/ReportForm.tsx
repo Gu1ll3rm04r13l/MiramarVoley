@@ -7,6 +7,7 @@ import { saveReport } from "@/lib/mutations";
 import { emptyDraft, draftFromReport } from "@/lib/report-draft";
 import { toNum, numStr } from "@/lib/form-utils";
 import type { ReportDraft, Match, MatchReport, ReportPlayer } from "@/lib/types";
+import PdfImportButton from "@/components/admin/PdfImportButton";
 
 type Existing = { report: MatchReport; players: ReportPlayer[] };
 
@@ -55,8 +56,7 @@ export default function ReportForm({
             {matches.map((m) => <option key={m.id} value={m.id}>{m.jornada} · {m.local} v {m.visitante}</option>)}
           </select>
         </label>
-        {/* PDF import button is injected here in F5. */}
-        <div id="pdf-import-slot" />
+        <PdfImportButton onParsed={(d) => { setDraft(d); setMsg("PDF importado — revisá y guardá."); }} />
       </div>
 
       <div className="grid sm:grid-cols-3 gap-3">
