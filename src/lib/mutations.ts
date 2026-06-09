@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createSupabaseServer } from "@/lib/supabase-server";
 import type { ReportDraft, StandingPasteRow } from "@/lib/types";
+import type { Json } from "@/lib/database.types";
 
 export type ActionResult = { ok: true; reportId?: string } | { ok: false; error: string };
 
@@ -55,19 +56,17 @@ export async function saveReport(matchId: string, draft: ReportDraft): Promise<A
   });
   if (rErr) return { ok: false, error: rErr.message };
 
-  const { error: delErr } = await supabase.from("report_players").delete().eq("report_id", reportId);
-  if (delErr) return { ok: false, error: delErr.message };
-
-  if (draft.jugadores.length) {
-    const rows = draft.jugadores.map((j) => ({
-      report_id: reportId,
+  // Atomic delete+insert of player rows (single transaction inside the RPC),
+  // so a failed insert can't leave the report with an empty grid.
+  const { error: rpErr } = await supabase.rpc("replace_report_players", {
+    p_report_id: reportId,
+    p_rows: draft.jugadores.map((j) => ({
       num: j.num, nombre: j.nombre,
       saq: j.saq, rec: j.rec, ata: j.ata, bloq: j.bloq, def: j.def, cata: j.cata,
       err: j.err, mas_menos: j.mas_menos, rating: j.rating,
-    }));
-    const { error: insErr } = await supabase.from("report_players").insert(rows);
-    if (insErr) return { ok: false, error: insErr.message };
-  }
+    })),
+  });
+  if (rpErr) return { ok: false, error: rpErr.message };
   revalidatePath(`/partido/${matchId}`);
   revalidatePath("/plantel");
   revalidatePath("/fixture");
@@ -78,17 +77,14 @@ export async function replaceStandings(
   divisionId: string, actualizado: string | null, rows: StandingPasteRow[],
 ): Promise<ActionResult> {
   const supabase = await createSupabaseServer();
-  const { error: delErr } = await supabase.from("standings").delete().eq("division_id", divisionId);
-  if (delErr) return { ok: false, error: delErr.message };
-
-  const insertRows = rows.map((r) => ({ division_id: divisionId, ...r }));
-  const { error: insErr } = await supabase.from("standings").insert(insertRows);
-  if (insErr) return { ok: false, error: insErr.message };
-
-  if (actualizado) {
-    const { error: updErr } = await supabase.from("divisions").update({ actualizado }).eq("id", divisionId);
-    if (updErr) return { ok: false, error: updErr.message };
-  }
+  // Atomic delete+insert+actualizado bump inside the RPC, so a failed insert
+  // can't leave the division with an empty standings table.
+  const { error } = await supabase.rpc("replace_division_standings", {
+    p_division_id: divisionId,
+    p_actualizado: actualizado as unknown as string, // RPC handles null (skips the bump)
+    p_rows: rows as unknown as Json,
+  });
+  if (error) return { ok: false, error: error.message };
   revalidatePath("/tabla");
   revalidatePath("/");
   return { ok: true };

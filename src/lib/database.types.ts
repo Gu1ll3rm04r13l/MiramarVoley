@@ -395,7 +395,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      replace_division_standings: {
+        Args: { p_actualizado: string; p_division_id: string; p_rows: Json }
+        Returns: undefined
+      }
+      replace_report_players: {
+        Args: { p_report_id: string; p_rows: Json }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
