@@ -119,10 +119,6 @@ export type Database = {
           fundamentos: Json | null
           id: string
           match_id: string | null
-          mvp_foto: string | null
-          mvp_nombre: string | null
-          mvp_num: number | null
-          mvp_posicion: string | null
           resultado_por_set: Json | null
           rival_errores: number | null
           rival_nombre: string | null
@@ -142,10 +138,6 @@ export type Database = {
           fundamentos?: Json | null
           id: string
           match_id?: string | null
-          mvp_foto?: string | null
-          mvp_nombre?: string | null
-          mvp_num?: number | null
-          mvp_posicion?: string | null
           resultado_por_set?: Json | null
           rival_errores?: number | null
           rival_nombre?: string | null
@@ -165,10 +157,6 @@ export type Database = {
           fundamentos?: Json | null
           id?: string
           match_id?: string | null
-          mvp_foto?: string | null
-          mvp_nombre?: string | null
-          mvp_num?: number | null
-          mvp_posicion?: string | null
           resultado_por_set?: Json | null
           rival_errores?: number | null
           rival_nombre?: string | null
@@ -181,7 +169,7 @@ export type Database = {
           {
             foreignKeyName: "match_reports_match_id_fkey"
             columns: ["match_id"]
-            isOneToOne: false
+            isOneToOne: true
             referencedRelation: "matches"
             referencedColumns: ["id"]
           },
@@ -196,6 +184,10 @@ export type Database = {
           id: string
           jornada: string | null
           local: string
+          mvp_foto: string | null
+          mvp_nombre: string | null
+          mvp_num: number | null
+          mvp_posicion: string | null
           nota: string | null
           parciales: string | null
           sets_local: number | null
@@ -210,6 +202,10 @@ export type Database = {
           id: string
           jornada?: string | null
           local: string
+          mvp_foto?: string | null
+          mvp_nombre?: string | null
+          mvp_num?: number | null
+          mvp_posicion?: string | null
           nota?: string | null
           parciales?: string | null
           sets_local?: number | null
@@ -224,6 +220,10 @@ export type Database = {
           id?: string
           jornada?: string | null
           local?: string
+          mvp_foto?: string | null
+          mvp_nombre?: string | null
+          mvp_num?: number | null
+          mvp_posicion?: string | null
           nota?: string | null
           parciales?: string | null
           sets_local?: number | null
