@@ -90,6 +90,15 @@ export default function MatchForm({ matches, divisions }: { matches: Match[]; di
         </div>
         <label className="block text-sm">Parciales<input className={input} value={form.parciales ?? ""} onChange={(e) => set("parciales", e.target.value)} placeholder="25-18/25-21/25-19" /></label>
         <label className="block text-sm">Nota<input className={input} value={form.nota ?? ""} onChange={(e) => set("nota", e.target.value)} /></label>
+        <fieldset className="border border-acero/20 rounded p-3">
+          <legend className="font-display font-bold px-1 text-sm">Jugador del partido (MVP)</legend>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <label className="text-sm sm:col-span-2">Nombre<input className={input} value={form.mvp_nombre ?? ""} onChange={(e) => set("mvp_nombre", e.target.value || null)} placeholder="Ej: Fausto" /></label>
+            <label className="text-sm">Posición<input className={input} value={form.mvp_posicion ?? ""} onChange={(e) => set("mvp_posicion", e.target.value || null)} placeholder="Punta" /></label>
+            <label className="text-sm">Número<input className={input} value={numStr(form.mvp_num)} onChange={(e) => set("mvp_num", toNum(e.target.value))} placeholder="7" /></label>
+            <label className="text-sm sm:col-span-4">Foto (URL del bucket, opcional)<input className={input} value={form.mvp_foto ?? ""} onChange={(e) => set("mvp_foto", e.target.value || null)} placeholder="https://vsypamgvducesglaknqk.supabase.co/storage/v1/object/public/mvp/…" /></label>
+          </div>
+        </fieldset>
         <div className="flex items-center gap-3">
           <button type="submit" disabled={saving} className="rounded bg-azul px-4 py-2 text-sm font-medium hover:bg-azul-bright disabled:opacity-60">{saving ? "Guardando…" : "Guardar"}</button>
           {msg && <span className="text-sm text-acero">{msg}</span>}

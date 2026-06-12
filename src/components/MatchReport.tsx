@@ -33,7 +33,7 @@ export default function MatchReport({ match, report, players }: { match: Match; 
       )}
 
       <section className="grid gap-3 sm:grid-cols-3">
-        {([["MVP", d.mejorRendimiento], ["Menor", d.menorRendimiento], ["Mejor sacador", d.mejorSacador]] as const).map(([label, dd]) => (
+        {([["Mejor rendimiento", d.mejorRendimiento], ["Menor", d.menorRendimiento], ["Mejor sacador", d.mejorSacador]] as const).map(([label, dd]) => (
           <div key={label} className="rounded-lg bg-navy/50 p-4">
             <p className="text-xs uppercase tracking-wide text-acero">{label}</p>
             {dd ? (
