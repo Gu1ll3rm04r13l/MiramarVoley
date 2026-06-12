@@ -20,6 +20,10 @@ export type MatchInput = {
   parciales: string | null;
   estado: string | null;
   nota: string | null;
+  mvp_nombre: string | null;
+  mvp_posicion: string | null;
+  mvp_num: number | null;
+  mvp_foto: string | null;
 };
 
 export async function upsertMatch(input: MatchInput): Promise<ActionResult> {
@@ -53,10 +57,6 @@ export async function saveReport(matchId: string, draft: ReportDraft): Promise<A
     resultado_por_set: draft.resultado_por_set,
     fundamentos: draft.fundamentos,
     destacados: draft.destacados,
-    mvp_nombre: draft.mvp_nombre ?? null,
-    mvp_posicion: draft.mvp_posicion ?? null,
-    mvp_num: draft.mvp_num ?? null,
-    mvp_foto: draft.mvp_foto ?? null,
   });
   if (rErr) return { ok: false, error: rErr.message };
 

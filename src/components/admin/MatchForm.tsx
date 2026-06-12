@@ -10,6 +10,7 @@ const EMPTY: MatchInput = {
   id: "", division_id: "ascenso", jornada: "", fecha: "", hora: "",
   local: "MIRAMAR V", visitante: "", sets_local: null, sets_visitante: null,
   parciales: "", estado: "proximo", nota: "",
+  mvp_nombre: null, mvp_posicion: null, mvp_num: null, mvp_foto: null,
 };
 
 function toInput(m: Match): MatchInput {
@@ -18,6 +19,7 @@ function toInput(m: Match): MatchInput {
     hora: m.hora ? m.hora.slice(0, 5) : "", local: m.local, visitante: m.visitante,
     sets_local: m.sets_local, sets_visitante: m.sets_visitante, parciales: m.parciales,
     estado: m.estado, nota: m.nota,
+    mvp_nombre: m.mvp_nombre, mvp_posicion: m.mvp_posicion, mvp_num: m.mvp_num, mvp_foto: m.mvp_foto,
   };
 }
 
