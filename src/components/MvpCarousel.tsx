@@ -46,7 +46,16 @@ export default function MvpCarousel({ slides }: { slides: MvpSlide[] }) {
   function onScroll() {
     const track = trackRef.current;
     if (!track) return;
-    setActive(Math.round(track.scrollLeft / track.clientWidth));
+    // El track tiene gap entre slides, así que el offset real de cada slide no es
+    // múltiplo de clientWidth. Elegimos el slide cuyo offsetLeft está más cerca del scroll.
+    const children = Array.from(track.children) as HTMLElement[];
+    if (children.length === 0) return;
+    const nearest = children.reduce(
+      (best, c, idx) =>
+        Math.abs(c.offsetLeft - track.scrollLeft) < Math.abs(children[best].offsetLeft - track.scrollLeft) ? idx : best,
+      0,
+    );
+    setActive(nearest);
   }
 
   return (
