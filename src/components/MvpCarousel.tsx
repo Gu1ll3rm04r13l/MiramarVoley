@@ -25,13 +25,16 @@ export default function MvpCarousel({ slides }: { slides: MvpSlide[] }) {
   const settleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [active, setActive] = useState(0);
 
-  // auto-avance cada 5s (off si hay 1 solo slide o prefers-reduced-motion)
+  // auto-avance cada 5s (off si hay 1 solo slide o prefers-reduced-motion).
+  // Depende de `active`: cada cambio de slide (manual con flecha/swipe o automático)
+  // re-arma el timer, así el contador se reinicia al navegar a mano y nunca "salta"
+  // de golpe al siguiente apenas llegás a una imagen.
   useEffect(() => {
     if (slides.length <= 1) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setActive((i) => (i + 1) % slides.length), 5000);
-    return () => clearInterval(t);
-  }, [slides.length]);
+    const t = setTimeout(() => setActive((i) => (i + 1) % slides.length), 5000);
+    return () => clearTimeout(t);
+  }, [active, slides.length]);
 
   // scrollea al slide activo
   useEffect(() => {
