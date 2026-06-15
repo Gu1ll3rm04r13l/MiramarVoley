@@ -50,3 +50,25 @@ export function matchContribution(m: MatchLike): { local: TeamDelta; visitante: 
     visitante: { pj: 1, pg: sv > sl ? 1 : 0, pp: sv < sl ? 1 : 0, sf: sv, sc: sl, psf: visPts, psc: localPts, pts: pts.visitante },
   };
 }
+
+const ADDITIVE = ["pj", "pg", "pp", "sf", "sc", "psf", "psc", "pts"] as const;
+
+export function applyDelta(row: Standing, d: TeamDelta, sign: 1 | -1): Standing {
+  const out = { ...row };
+  for (const k of ADDITIVE) {
+    out[k] = (out[k] ?? 0) + sign * d[k];
+  }
+  return out;
+}
+
+const round3 = (n: number) => Math.round(n * 1000) / 1000;
+
+export function recomputeDerived(row: Standing): Standing {
+  const sf = row.sf ?? 0, sc = row.sc ?? 0, psf = row.psf ?? 0, psc = row.psc ?? 0;
+  return {
+    ...row,
+    ds: sf - sc,
+    rs: sc > 0 ? round3(sf / sc) : 0,
+    rp: psc > 0 ? round3(psf / psc) : 0,
+  };
+}

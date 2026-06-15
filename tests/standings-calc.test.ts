@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { parseParciales, matchContribution } from "@/lib/standings-calc";
+import { parseParciales, matchContribution, applyDelta, recomputeDerived, type TeamDelta } from "@/lib/standings-calc";
+import type { Standing } from "@/lib/types";
 
 describe("parseParciales", () => {
   it("sums points per side", () => {
@@ -40,5 +41,42 @@ describe("matchContribution", () => {
   it("returns null when not jugado or sets missing", () => {
     expect(matchContribution({ ...base, estado: "proximo", sets_local: 1, sets_visitante: 3 })).toBeNull();
     expect(matchContribution({ ...base, estado: "jugado", sets_local: null, sets_visitante: 3 })).toBeNull();
+  });
+});
+
+const row = (over: Partial<Standing> = {}): Standing => ({
+  id: 1, division_id: "ascenso", equipo: "MIRAMAR V", pos: 1,
+  pj: 9, pg: 6, pp: 3, sf: 20, sc: 12, ds: 8, rs: 1.667,
+  psf: 800, psc: 700, rp: 1.143, pts: 18, ...over,
+});
+
+const delta: TeamDelta = { pj: 1, pg: 1, pp: 0, sf: 3, sc: 1, psf: 95, psc: 81, pts: 3 };
+
+describe("applyDelta", () => {
+  it("adds additive fields with sign +1", () => {
+    const r = applyDelta(row(), delta, 1);
+    expect(r.pj).toBe(10); expect(r.pg).toBe(7); expect(r.sf).toBe(23);
+    expect(r.sc).toBe(13); expect(r.psf).toBe(895); expect(r.psc).toBe(781); expect(r.pts).toBe(21);
+  });
+  it("subtracts with sign -1 (reverse)", () => {
+    const r = applyDelta(row(), delta, -1);
+    expect(r.pj).toBe(8); expect(r.sf).toBe(17); expect(r.pts).toBe(15);
+  });
+  it("treats null additive fields as 0", () => {
+    const r = applyDelta(row({ pts: null, sf: null }), delta, 1);
+    expect(r.pts).toBe(3); expect(r.sf).toBe(3);
+  });
+});
+
+describe("recomputeDerived", () => {
+  it("computes ds, rs, rp", () => {
+    const r = recomputeDerived(row({ sf: 23, sc: 13, psf: 895, psc: 781 }));
+    expect(r.ds).toBe(10);
+    expect(r.rs).toBeCloseTo(1.769, 3);
+    expect(r.rp).toBeCloseTo(1.146, 3);
+  });
+  it("uses 0 ratio when divisor is 0", () => {
+    const r = recomputeDerived(row({ sf: 3, sc: 0, psf: 80, psc: 0 }));
+    expect(r.rs).toBe(0); expect(r.rp).toBe(0);
   });
 });
