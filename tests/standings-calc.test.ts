@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseParciales, matchContribution, applyDelta, recomputeDerived, type TeamDelta } from "@/lib/standings-calc";
+import { parseParciales, matchContribution, applyDelta, recomputeDerived, recomputePositions, findStandingIndex, type TeamDelta } from "@/lib/standings-calc";
 import type { Standing } from "@/lib/types";
 
 describe("parseParciales", () => {
@@ -78,5 +78,32 @@ describe("recomputeDerived", () => {
   it("uses 0 ratio when divisor is 0", () => {
     const r = recomputeDerived(row({ sf: 3, sc: 0, psf: 80, psc: 0 }));
     expect(r.rs).toBe(0); expect(r.rp).toBe(0);
+  });
+});
+
+describe("recomputePositions", () => {
+  it("orders by pts then ds then rs then rp and assigns pos", () => {
+    const rows = [
+      row({ id: 1, equipo: "A", pts: 10, ds: 2, rs: 1.2, rp: 1.0 }),
+      row({ id: 2, equipo: "B", pts: 15, ds: 5, rs: 1.5, rp: 1.1 }),
+      row({ id: 3, equipo: "C", pts: 10, ds: 4, rs: 1.3, rp: 1.0 }),
+    ];
+    const sorted = recomputePositions(rows);
+    expect(sorted.map((r) => r.equipo)).toEqual(["B", "C", "A"]);
+    expect(sorted.map((r) => r.pos)).toEqual([1, 2, 3]);
+  });
+});
+
+describe("findStandingIndex", () => {
+  const rows = [row({ id: 1, equipo: "MIRAMAR V" }), row({ id: 2, equipo: "TALLERES" })];
+  const aliases = new Map([["MIRAMAR", "MIRAMAR V"]]);
+  it("matches by exact name case-insensitively", () => {
+    expect(findStandingIndex(rows, "talleres", aliases)).toBe(1);
+  });
+  it("matches through an alias", () => {
+    expect(findStandingIndex(rows, "MIRAMAR", aliases)).toBe(0);
+  });
+  it("returns -1 when not found", () => {
+    expect(findStandingIndex(rows, "PEÑAROL", aliases)).toBe(-1);
   });
 });

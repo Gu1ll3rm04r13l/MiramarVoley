@@ -72,3 +72,20 @@ export function recomputeDerived(row: Standing): Standing {
     rp: psc > 0 ? round3(psf / psc) : 0,
   };
 }
+
+export function recomputePositions(rows: Standing[]): Standing[] {
+  const sorted = [...rows].sort((a, b) =>
+    (b.pts ?? 0) - (a.pts ?? 0) ||
+    (b.ds ?? 0) - (a.ds ?? 0) ||
+    (b.rs ?? 0) - (a.rs ?? 0) ||
+    (b.rp ?? 0) - (a.rp ?? 0),
+  );
+  return sorted.map((r, i) => ({ ...r, pos: i + 1 }));
+}
+
+const norm = (s: string) => s.trim().toUpperCase();
+
+export function findStandingIndex(rows: Standing[], teamName: string, aliases: Map<string, string>): number {
+  const target = norm(normalizeClub(teamName, aliases));
+  return rows.findIndex((r) => norm(r.equipo) === target);
+}
