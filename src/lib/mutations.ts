@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { createSupabaseServer } from "@/lib/supabase-server";
-import type { ReportDraft, StandingPasteRow } from "@/lib/types";
+import type { ReportDraft, StandingPasteRow, ClubAlias, Standing } from "@/lib/types";
 import type { Json } from "@/lib/database.types";
+import { matchContribution, applyDelta, recomputeDerived, recomputePositions, findStandingIndex, type TeamDelta } from "@/lib/standings-calc";
 
-export type ActionResult = { ok: true; reportId?: string } | { ok: false; error: string };
+export type ActionResult = { ok: true; reportId?: string; warnings?: string[] } | { ok: false; error: string };
 
 export type MatchInput = {
   id: string;
@@ -28,12 +29,70 @@ export type MatchInput = {
 
 export async function upsertMatch(input: MatchInput): Promise<ActionResult> {
   const supabase = await createSupabaseServer();
+
+  // Read the previous row BEFORE the upsert so we can reverse its old contribution.
+  const { data: old } = await supabase.from("matches").select("*").eq("id", input.id).maybeSingle();
+
   const { error } = await supabase.from("matches").upsert(input);
   if (error) return { ok: false, error: error.message };
+
+  const warnings = await applyMatchToStandings(supabase, old as MatchInput | null, input);
+
   revalidatePath("/");
   revalidatePath("/fixture");
+  revalidatePath("/tabla");
   revalidatePath(`/partido/${input.id}`);
-  return { ok: true };
+  return { ok: true, warnings: warnings.length ? warnings : undefined };
+}
+
+type StandingsOp = { divisionId: string; team: string; delta: TeamDelta; sign: 1 | -1 };
+
+async function applyMatchToStandings(
+  supabase: Awaited<ReturnType<typeof createSupabaseServer>>,
+  old: MatchInput | null,
+  next: MatchInput,
+): Promise<string[]> {
+  const warnings: string[] = [];
+
+  const ops: StandingsOp[] = [];
+  const oldContrib = old ? matchContribution(old) : null;
+  if (oldContrib && old?.division_id) {
+    ops.push({ divisionId: old.division_id, team: old.local, delta: oldContrib.local, sign: -1 });
+    ops.push({ divisionId: old.division_id, team: old.visitante, delta: oldContrib.visitante, sign: -1 });
+  }
+  const nextContrib = matchContribution(next);
+  if (nextContrib && next.division_id) {
+    ops.push({ divisionId: next.division_id, team: next.local, delta: nextContrib.local, sign: 1 });
+    ops.push({ divisionId: next.division_id, team: next.visitante, delta: nextContrib.visitante, sign: 1 });
+  }
+  if (ops.length === 0) return warnings;
+
+  const { data: aliasData } = await supabase.from("club_aliases").select("*");
+  const aliases = new Map((aliasData ?? []).map((a: ClubAlias) => [a.alias, a.canonical]));
+
+  const divisions = [...new Set(ops.map((o) => o.divisionId))];
+  for (const div of divisions) {
+    const { data: rowsData } = await supabase.from("standings").select("*").eq("division_id", div);
+    let rows = (rowsData ?? []) as Standing[];
+
+    for (const op of ops.filter((o) => o.divisionId === div)) {
+      const idx = findStandingIndex(rows, op.team, aliases);
+      if (idx < 0) {
+        warnings.push(`${op.team} no está en la tabla — esa fila no se actualizó.`);
+        continue;
+      }
+      rows[idx] = recomputeDerived(applyDelta(rows[idx], op.delta, op.sign));
+    }
+
+    rows = recomputePositions(rows);
+    for (const row of rows) {
+      const { id, ...fields } = row;
+      const { error: upErr } = await supabase.from("standings").update(fields).eq("id", id);
+      if (upErr) warnings.push(`No se pudo guardar la tabla (${div}): ${upErr.message}`);
+    }
+  }
+
+  return warnings;
 }
 
 export async function saveReport(matchId: string, draft: ReportDraft): Promise<ActionResult> {
