@@ -17,7 +17,7 @@ const NAV = [
 export default function Header() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-40 glass-nav border-b border-acero/20 shadow-lg shadow-black/20">
+    <header className="sticky top-0 z-40 glass-nav border-b border-acero/10 shadow-lg shadow-black/30">
       <nav className="max-w-5xl mx-auto px-4 h-14 flex items-center gap-3">
         <Link href="/" className="flex items-center gap-2 shrink-0 group">
           <Image

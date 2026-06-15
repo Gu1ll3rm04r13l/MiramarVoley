@@ -50,7 +50,7 @@ export default function MatchCard({ match, hasReport }: { match: Match; hasRepor
               {match.sets_local}<span className="text-acero">–</span>{match.sets_visitante}
             </span>
           ) : (
-            <span className="text-[0.7rem] rounded-full px-2 py-0.5 bg-navy border border-azul/40 text-hueso whitespace-nowrap">
+            <span className="text-[0.7rem] rounded-full px-2 py-0.5 bg-panel-2 border border-azul/40 text-hueso whitespace-nowrap">
               {ESTADO_LABEL[match.estado ?? ""] ?? "vs"}
             </span>
           )}

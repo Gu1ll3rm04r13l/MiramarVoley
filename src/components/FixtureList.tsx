@@ -39,7 +39,7 @@ export default function FixtureList({ matches, reportMatchIds }: { matches: Matc
       <div className="flex flex-wrap gap-2 mb-4">
         {FILTERS.map((x) => (
           <button key={x.v} type="button" onClick={() => setF(x.v)} aria-pressed={f === x.v}
-            className={`px-3 py-1.5 rounded-full text-sm transition-colors ${f === x.v ? "bg-azul text-hueso" : "bg-navy text-acero hover:text-hueso"}`}>
+            className={`px-3 py-1.5 rounded-md text-sm transition-colors ${f === x.v ? "bg-azul text-hueso" : "bg-panel border border-acero/10 text-acero hover:text-hueso"}`}>
             {x.label}
           </button>
         ))}

@@ -68,7 +68,7 @@ export default function NextMatchHero({
           <p className="kicker !text-acero !tracking-[0.2em] mb-3">Posición · Ascenso</p>
           <div className="flex items-end gap-2">
             {posicion != null ? (
-              <span className="display-xl text-6xl text-glow-azul leading-none">
+              <span className="num-display text-6xl text-azul-bright leading-none">
                 <Counter value={posicion} suffix="°" />
               </span>
             ) : (

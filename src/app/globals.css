@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+  /* Marca (escudo) — reservada para acentos, no para grandes rellenos */
   --color-azul: #065fa7;
   --color-azul-bright: #0686cd;
   --color-navy: #0c2a4a;
-  --color-acero: #a0a09c;
-  --color-hueso: #f2f3ef;
-  --color-negro: #1a1c20;
+  --color-oro: #e8b72a;
+
+  /* Base Broadcast — app deportiva dark, neutra y nítida */
+  --color-negro: #0e1116;   /* fondo app */
+  --color-panel: #161b22;   /* superficie */
+  --color-panel-2: #1b2230; /* superficie elevada / headers de tabla */
+  --color-hueso: #e9edf2;   /* texto principal */
+  --color-acero: #8a93a0;   /* texto atenuado / líneas */
 }
 
 @theme inline {
@@ -15,10 +21,9 @@
 }
 
 :root {
-  --glow-azul: 0 0 40px #0686cdaa, 0 0 10px #0686cd55;
-  --glow-azul-soft: 0 0 24px #0686cd55;
   --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
-  --hairline: 1px solid #a0a09c2e;
+  --hairline: 1px solid #8a93a01f;
+  --shadow-card: 0 1px 0 0 #ffffff08, 0 12px 30px -18px #00000099;
 }
 
 html { color-scheme: dark; }
@@ -31,78 +36,68 @@ body {
   font-family: var(--font-display), system-ui, sans-serif;
 }
 
-/* Titular gigante de impacto */
+/* Titular de impacto — Archivo black, limpio (sin glow) */
 .display-xl {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 900;
-  letter-spacing: -0.03em;
-  line-height: 0.92;
+  letter-spacing: -0.025em;
+  line-height: 0.94;
   text-wrap: balance;
 }
 .kicker {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  letter-spacing: 0.28em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: 0.72rem;
   color: var(--color-azul-bright);
 }
-.text-glow-azul {
-  background: linear-gradient(180deg, #f2f3ef 0%, #cfe6f6 55%, #6cb6e6 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* Antes gradiente con glow; ahora titular sólido nítido (broadcast) */
+.text-glow-azul { color: var(--color-hueso); }
+
+/* Cifra/dato tabular destacado (PTS, marcadores, posición) */
+.num-display {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
 }
 
-/* ---- Superficies ---- */
-.glass {
-  background: #0c2a4a66;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: var(--hairline);
-}
-.surface { background: #0c2a4a99; border: var(--hairline); }
+/* ---- Superficies (paneles broadcast, sin blur pesado) ---- */
+.glass { background: var(--color-panel); border: var(--hairline); }
+.surface { background: var(--color-panel); border: var(--hairline); }
+.panel-2 { background: var(--color-panel-2); }
 .glass-nav {
-  background: #0a2038ee;
-  backdrop-filter: blur(28px) saturate(140%);
-  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  background: #0e1116e6;
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
 }
 .hairline { border: var(--hairline); }
-.glow { box-shadow: var(--glow-azul); }
-.glow-soft { box-shadow: var(--glow-azul-soft); }
+.card-shadow { box-shadow: var(--shadow-card); }
+/* Conserva los nombres de hover usados en componentes, pero suaves */
+.glow { box-shadow: 0 0 0 1px #0686cd55, 0 10px 30px -18px #0686cd66; }
+.glow-soft { box-shadow: 0 8px 26px -20px #0686cd88; }
 
-/* ---- Atmósfera del hero (mesh + aurora + grano) ---- */
+/* ---- Fondo del hero — limpio, un realce azul arriba + línea de cancha ---- */
 .hero-bg {
   position: relative;
   isolation: isolate;
   background:
-    radial-gradient(70% 55% at 50% 0%, #0686cd3d 0%, transparent 60%),
-    radial-gradient(45% 40% at 82% 18%, #065fa733 0%, transparent 55%),
-    radial-gradient(60% 60% at 16% 24%, #0c2a4a99 0%, transparent 60%),
-    linear-gradient(180deg, #0c2a4a 0%, #0a1320 55%, #07090d 100%);
-}
-.hero-bg::before {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  z-index: -1;
-  background:
-    radial-gradient(38% 50% at 30% 30%, #0686cd2e, transparent 70%),
-    radial-gradient(40% 50% at 72% 60%, #1565a32e, transparent 70%);
-  filter: blur(28px);
-  animation: aurora 16s ease-in-out infinite alternate;
+    radial-gradient(62% 48% at 50% -8%, #0686cd24 0%, transparent 62%),
+    radial-gradient(50% 40% at 84% 12%, #065fa71f 0%, transparent 58%),
+    linear-gradient(180deg, #121925 0%, #0e1320 48%, #0e1116 100%);
 }
 .hero-bg::after {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  opacity: 0.5;
+  opacity: 0.4;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }
 
-/* Línea de cancha luminosa (acento decorativo) */
+/* Línea de cancha tenue (acento estructural, no decorativo) */
 .court-line {
   position: absolute;
   left: 50%;
@@ -112,8 +107,8 @@ body {
   transform: translateX(-50%);
   z-index: -1;
   pointer-events: none;
-  border-left: 1px solid #0686cd1f;
-  border-right: 1px solid #0686cd1f;
+  border-left: 1px solid #0686cd1a;
+  border-right: 1px solid #0686cd1a;
 }
 .court-line::before {
   content: "";
@@ -121,7 +116,7 @@ body {
   left: 0;
   right: 0;
   top: 38%;
-  border-top: 1px solid #0686cd24;
+  border-top: 1px solid #0686cd1f;
 }
 
 /* ---- Keyframes ---- */
@@ -132,15 +127,7 @@ body {
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-@keyframes halo-pulse {
-  0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(1); }
-  50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.12); }
-}
-@keyframes aurora {
-  0% { transform: translate3d(-4%, -2%, 0) rotate(0deg); }
-  100% { transform: translate3d(4%, 3%, 0) rotate(8deg); }
+  50% { transform: translateY(-8px); }
 }
 @keyframes shimmer {
   0% { background-position: -200% 0; }
@@ -151,20 +138,19 @@ body {
   60%, 100% { transform: translateX(220%) skewX(-12deg); }
 }
 
-/* Escudo: flota + halo radial pulsante detrás */
+/* Escudo del hero: flota, con un halo radial discreto */
 .escudo-wrap { position: relative; display: inline-block; }
 .escudo-wrap::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 240%;
-  height: 240%;
+  width: 200%;
+  height: 200%;
   transform: translate(-50%, -50%);
   z-index: -1;
   border-radius: 9999px;
-  background: radial-gradient(closest-side, #0686cd88, #0686cd22 55%, transparent 72%);
-  animation: halo-pulse 4.5s var(--ease-out-soft) infinite;
+  background: radial-gradient(closest-side, #0686cd55, #0686cd14 58%, transparent 72%);
 }
 .escudo-float { animation: float 6s var(--ease-out-soft) infinite; border-radius: 9999px; }
 
@@ -172,14 +158,14 @@ body {
 .btn-primary {
   position: relative;
   overflow: hidden;
-  border-radius: 9999px;
+  border-radius: 10px;
   background: linear-gradient(180deg, #0686cd, #065fa7);
   color: #f2f3ef;
   font-weight: 600;
-  box-shadow: 0 8px 24px #065fa755;
+  box-shadow: 0 8px 22px -10px #065fa7cc;
   transition: transform 0.25s var(--ease-out-soft), box-shadow 0.25s var(--ease-out-soft);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 30px #065fa777; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -10px #065fa7; }
 .btn-primary::after {
   content: "";
   position: absolute;
@@ -187,21 +173,21 @@ body {
   left: 0;
   width: 40%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, #ffffff55, transparent);
+  background: linear-gradient(90deg, transparent, #ffffff44, transparent);
 }
 .btn-primary:hover::after { animation: sweep 0.9s ease forwards; }
 .btn-ghost {
-  border-radius: 9999px;
-  border: 1px solid #a0a09c40;
-  color: #f2f3ef;
+  border-radius: 10px;
+  border: 1px solid #8a93a040;
+  color: #e9edf2;
   font-weight: 500;
   transition: border-color 0.25s, background-color 0.25s, transform 0.25s var(--ease-out-soft);
 }
-.btn-ghost:hover { border-color: #0686cd; background: #0686cd1a; transform: translateY(-2px); }
+.btn-ghost:hover { border-color: #0686cd; background: #0686cd14; transform: translateY(-2px); }
 
 /* ---- Shimmer placeholder ---- */
 .shimmer {
-  background: linear-gradient(100deg, #0c2a4a 30%, #143a5e 50%, #0c2a4a 70%);
+  background: linear-gradient(100deg, #161b22 30%, #20293a 50%, #161b22 70%);
   background-size: 200% 100%;
   animation: shimmer 1.8s linear infinite;
 }
@@ -217,10 +203,10 @@ body {
 .js-ready .reveal.in-view { opacity: 1; transform: translateY(0); }
 
 /* ---- Identidad de flyer (Próximo partido / Jugador del partido) ---- */
-/* Miramar resaltado en listados, con glow azul */
+/* Miramar resaltado en listados, con realce azul */
 .text-glow-mv {
   color: var(--color-hueso);
-  text-shadow: 0 0 18px #0686cdcc, 0 0 5px #0686cd99;
+  text-shadow: 0 0 16px #0686cdb0, 0 0 4px #0686cd80;
 }
 
 /* Panel azul royal del flyer */
@@ -257,7 +243,7 @@ body {
   filter: drop-shadow(0 0 6px #0686cd66);
 }
 
-/* Titular del flyer: display pesado, glow */
+/* Titular del flyer: display pesado */
 .flyer-title {
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 900;
@@ -302,5 +288,4 @@ body {
 @media (prefers-reduced-motion: reduce) {
   * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
-  .hero-bg::before, .escudo-wrap::before { animation: none !important; }
 }

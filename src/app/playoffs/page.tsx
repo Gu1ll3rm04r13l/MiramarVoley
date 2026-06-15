@@ -90,7 +90,7 @@ export default async function PlayoffsPage() {
                     <li
                       key={pos}
                       className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm ${
-                        s.mv ? "bg-azul/20 border border-azul/40" : "bg-navy/40"
+                        s.mv ? "bg-azul/20 border border-azul/40" : "bg-panel-2"
                       }`}
                     >
                       <span className="font-display font-bold tabular-nums w-7 text-center" style={{ color: copa.accent }}>{pos}°</span>

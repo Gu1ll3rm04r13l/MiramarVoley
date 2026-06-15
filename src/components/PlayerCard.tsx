@@ -9,7 +9,7 @@ export default function PlayerCard({ player, dorsal, onClick }: { player: Player
       className="group h-full text-left w-full rounded-xl surface p-4 transition-all duration-300 hover:-translate-y-1 hover:border-azul/60 hover:glow-soft"
     >
       <div className="flex items-center gap-3">
-        <div className="relative w-14 h-14 rounded-full overflow-hidden bg-navy shrink-0 grid place-items-center">
+        <div className="relative w-14 h-14 rounded-full overflow-hidden bg-panel-2 shrink-0 grid place-items-center">
           {player.foto_url ? (
             <Image src={player.foto_url} alt={player.nombre} fill className="object-cover transition-transform duration-300 group-hover:scale-110" />
           ) : (
