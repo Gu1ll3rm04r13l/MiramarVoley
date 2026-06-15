@@ -9,8 +9,9 @@ export default async function PlantelPage() {
     getPlayers(), getAppConfig(), getAllReportPlayers(),
   ]);
   // buena_fe already ordered last via `orden`; keep DB order.
-  // Ocultar entradas sin posición real (p. ej. "Pablo Medina").
-  const visibles = players.filter((p) => p.nombre !== "Pablo Medina");
+  // Ocultar entradas sin posición real ("Pablo Medina") y jugadores inactivos ("Elio Contreras").
+  const ocultos = new Set(["Pablo Medina", "Elio Contreras"]);
+  const visibles = players.filter((p) => !ocultos.has(p.nombre));
   return (
     <>
       <PageHeading kicker="El equipo" title="Plantel" />
