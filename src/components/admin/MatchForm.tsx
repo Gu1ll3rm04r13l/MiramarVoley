@@ -11,6 +11,7 @@ const EMPTY: MatchInput = {
   local: "MIRAMAR V", visitante: "", sets_local: null, sets_visitante: null,
   parciales: "", estado: "proximo", nota: "",
   mvp_nombre: null, mvp_posicion: null, mvp_num: null, mvp_foto: null,
+  resultado_foto: null,
 };
 
 function toInput(m: Match): MatchInput {
@@ -20,6 +21,7 @@ function toInput(m: Match): MatchInput {
     sets_local: m.sets_local, sets_visitante: m.sets_visitante, parciales: m.parciales,
     estado: m.estado, nota: m.nota,
     mvp_nombre: m.mvp_nombre, mvp_posicion: m.mvp_posicion, mvp_num: m.mvp_num, mvp_foto: m.mvp_foto,
+    resultado_foto: m.resultado_foto,
   };
 }
 
@@ -104,6 +106,9 @@ export default function MatchForm({ matches, divisions }: { matches: Match[]; di
             <label className="text-sm sm:col-span-4">Foto (URL del bucket, opcional)<input className={input} value={form.mvp_foto ?? ""} onChange={(e) => set("mvp_foto", e.target.value || null)} placeholder="https://vsypamgvducesglaknqk.supabase.co/storage/v1/object/public/mvp/…" /></label>
           </div>
         </fieldset>
+        <label className="block text-sm">Resultado — imagen (URL del bucket, opcional)
+          <input className={input} value={form.resultado_foto ?? ""} onChange={(e) => set("resultado_foto", e.target.value || null)} placeholder="https://vsypamgvducesglaknqk.supabase.co/storage/v1/object/public/mvp/Resultado%20vs%20Suda.jpeg" />
+        </label>
         <div className="flex items-center gap-3">
           <button type="submit" disabled={saving} className="rounded bg-azul px-4 py-2 text-sm font-medium hover:bg-azul-bright disabled:opacity-60">{saving ? "Guardando…" : "Guardar"}</button>
           {msg && <span className="text-sm text-acero">{msg}</span>}

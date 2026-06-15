@@ -190,6 +190,7 @@ export type Database = {
           mvp_posicion: string | null
           nota: string | null
           parciales: string | null
+          resultado_foto: string | null
           sets_local: number | null
           sets_visitante: number | null
           visitante: string
@@ -208,6 +209,7 @@ export type Database = {
           mvp_posicion?: string | null
           nota?: string | null
           parciales?: string | null
+          resultado_foto?: string | null
           sets_local?: number | null
           sets_visitante?: number | null
           visitante: string
@@ -226,6 +228,7 @@ export type Database = {
           mvp_posicion?: string | null
           nota?: string | null
           parciales?: string | null
+          resultado_foto?: string | null
           sets_local?: number | null
           sets_visitante?: number | null
           visitante?: string

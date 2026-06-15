@@ -25,6 +25,7 @@ export type MatchInput = {
   mvp_posicion: string | null;
   mvp_num: number | null;
   mvp_foto: string | null;
+  resultado_foto: string | null;
 };
 
 export async function upsertMatch(input: MatchInput): Promise<ActionResult> {

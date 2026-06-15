@@ -1,4 +1,5 @@
 import Image from "next/image";
+import FlyerImageCard, { FLYER_CARD_H } from "@/components/FlyerImageCard";
 
 /** Tarjeta "Jugador del partido" con la identidad del flyer (panel navy, escudo,
  *  título en display, nombre en itálica, posición y número con íconos). */
@@ -18,27 +19,13 @@ export default function MvpCard({
   // responsive, ej: "h-[36rem] sm:h-[40rem]"). El carrusel es flex y estiraría cada
   // card a la más alta; al fijar el alto acá, todas miden igual y no queda hueco
   // abajo de las más bajas.
-  const cardH = "h-[40rem]";
+  const cardH = FLYER_CARD_H;
 
-  // Si hay flyer (imagen ya diseñada por el club), se muestra entero, sin recortar
-  // ni superponer texto: el flyer ya trae nombre/posición/rival horneados.
+  // Si hay flyer (imagen ya diseñada por el club), se muestra entero vía FlyerImageCard
+  // (MISMO componente/tamaño que el Resultado → ambos miden igual). El flyer ya trae
+  // nombre/posición/rival horneados, así que no superponemos texto.
   if (foto) {
-    return (
-      <section className={`flyer-navy grid place-items-center overflow-hidden rounded-2xl border border-azul-bright/25 p-3 sm:p-4 ${cardH}`}>
-        {/* <img> normal (no next/image) a propósito: la URL la pega el usuario a mano
-            (bucket, ruta local, lo que sea). Así cualquier host funciona sin tocar
-            next.config y una URL inválida nunca tumba la home.
-
-            Mobile: el flyer llena el ALTO de la card (h-full) → se ve grande y prolijo.
-            Desktop (sm+): la card es ancha; forzar el alto agrandaba el flyer enorme y
-            lo cortaba (el max-h en % no frena por un quirk de CSS grid). Acá lo limito
-            con valores CONCRETOS (max-w-sm = mismo ancho que en mobile, max-h-[36rem])
-            → se ve ENTERO, del mismo tamaño chico que mobile, centrado. object-contain
-            nunca recorta; overflow-hidden de la section evita cualquier desborde. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={foto} alt={`MVP ${nombre}`} loading="lazy" className="h-full w-auto max-w-full rounded-xl object-contain sm:h-auto sm:max-h-[36rem] sm:max-w-sm" />
-      </section>
-    );
+    return <FlyerImageCard src={foto} alt={`MVP ${nombre}`} />;
   }
 
   return (

@@ -24,6 +24,9 @@ function TeamName({ name, align }: { name: string; align: "left" | "right" }) {
 export default function MatchCard({ match, hasReport }: { match: Match; hasReport?: boolean }) {
   const played = match.estado === "jugado";
   const next = match.estado === "proximo";
+  // Hay página de detalle si hay reporte SetPoint O al menos un flyer (MVP/Resultado).
+  // Así un partido sin reporte pero con imágenes igual es clickeable.
+  const hasDetail = Boolean(hasReport || match.mvp_nombre || match.resultado_foto);
   const body = (
     <div
       className={`group h-full rounded-lg p-4 transition-all duration-300 hover:-translate-y-0.5 ${
@@ -60,14 +63,14 @@ export default function MatchCard({ match, hasReport }: { match: Match; hasRepor
       </div>
 
       {match.nota && <p className="mt-3 text-xs text-acero text-center">{match.nota}</p>}
-      {played && hasReport && (
+      {hasDetail && (
         <p className="mt-3 text-xs text-azul-bright group-hover:translate-x-0.5 transition-transform">
-          Ver reporte →
+          {hasReport ? "Ver reporte →" : "Ver detalle →"}
         </p>
       )}
     </div>
   );
-  return played && hasReport ? (
+  return hasDetail ? (
     <Link href={`/partido/${match.id}`} aria-label={`Detalle ${match.local} vs ${match.visitante}`}>
       {body}
     </Link>
