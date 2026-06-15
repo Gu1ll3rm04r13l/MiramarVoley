@@ -17,7 +17,21 @@ function escudoFor(equipo: string): string | null {
   if (n.startsWith("quilmes")) return "/escudos/quilmes.png";
   if (n.startsWith("sudamerica")) return "/escudos/sudamerica.png";
   if (n === "cdt" || n.startsWith("cdt ")) return "/escudos/cdtv.png"; // CDT, CDT B, CDT C
+  if (n.startsWith("talleres")) return "/escudos/talleres.png";
+  if (n.startsWith("agp")) return "/escudos/agp.png";
+  if (n.startsWith("edal")) return "/escudos/edal.png";
+  if (n.startsWith("cai")) return "/escudos/cai.png"; // CAI Dolores
+  if (n.includes("gesell")) return "/escudos/gesell.png"; // Atle Gesell
   return null;
+}
+
+// Color del número de posición según la copa de playoffs (mismos accents que /playoffs).
+function tierColor(pos: number | null): string {
+  if (pos == null) return "text-hueso";
+  if (pos <= 4) return "text-[#e3c16b]"; // Copa de Oro
+  if (pos <= 8) return "text-[#cdd3da]"; // Copa de Plata
+  if (pos <= 12) return "text-[#cd8e5e]"; // Copa de Bronce
+  return "text-hueso";
 }
 
 export default function StandingsTable({
@@ -29,8 +43,6 @@ export default function StandingsTable({
   const [div, setDiv] = useState<Div>("ascenso");
   const rows = div === "ascenso" ? ascenso : top8;
   const actualizado = div === "ascenso" ? actualizadoAscenso : actualizadoTop8;
-  // Top 4 = zona de playoffs (rank destacado en dorado).
-  const PLAYOFF_CUT = 4;
 
   const th = "font-display font-bold uppercase tracking-wider text-[0.7rem] px-2 py-3 text-center";
 
@@ -63,7 +75,6 @@ export default function StandingsTable({
             <tbody>
               {rows.map((r) => {
                 const mine = isMiramar(r.equipo, nombreEnTablas);
-                const podio = r.pos != null && r.pos <= PLAYOFF_CUT;
                 const escudo = escudoFor(r.equipo);
                 return (
                   <tr
@@ -77,7 +88,7 @@ export default function StandingsTable({
                         mine ? "shadow-[inset_4px_0_0_0_var(--color-azul-bright)]" : ""
                       }`}
                     >
-                      <span className={`num-display text-lg leading-none ${podio ? "text-oro" : "text-hueso"}`}>
+                      <span className={`num-display text-lg leading-none ${tierColor(r.pos)}`}>
                         {r.pos}
                       </span>
                     </td>
@@ -113,9 +124,11 @@ export default function StandingsTable({
             </tbody>
           </table>
         </div>
-        <p className="panel-2 border-t border-acero/10 px-4 py-3 text-[0.72rem] text-acero">
-          <span className="text-oro">●</span> Zona de playoffs (1° a 4°)
-        </p>
+        <div className="panel-2 border-t border-acero/10 px-4 py-3 text-[0.72rem] text-acero flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span><span className="text-[#e3c16b]">●</span> Copa de Oro (1° a 4°)</span>
+          <span><span className="text-[#cdd3da]">●</span> Copa de Plata (5° a 8°)</span>
+          <span><span className="text-[#cd8e5e]">●</span> Copa de Bronce (9° a 12°)</span>
+        </div>
       </div>
     </section>
   );
