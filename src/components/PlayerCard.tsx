@@ -1,7 +1,13 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import type { Player, Dorsal } from "@/lib/types";
 
 export default function PlayerCard({ player, dorsal, onClick }: { player: Player; dorsal: Dorsal; onClick: () => void }) {
+  // foto_url (DB) gana; si no, foto local por dorsal en /public/jugadores/{n}.png.
+  const localFoto = typeof dorsal === "number" ? `/jugadores/${dorsal}.png` : null;
+  const [src, setSrc] = useState<string | null>(player.foto_url ?? localFoto);
   return (
     <button
       type="button"
@@ -10,8 +16,8 @@ export default function PlayerCard({ player, dorsal, onClick }: { player: Player
     >
       <div className="flex items-center gap-3">
         <div className="relative w-14 h-14 rounded-full overflow-hidden bg-panel-2 shrink-0 grid place-items-center">
-          {player.foto_url ? (
-            <Image src={player.foto_url} alt={player.nombre} fill className="object-cover transition-transform duration-300 group-hover:scale-110" />
+          {src ? (
+            <Image src={src} alt={player.nombre} fill sizes="56px" className="object-cover transition-transform duration-300 group-hover:scale-110" onError={() => setSrc(null)} />
           ) : (
             <>
               <span className="absolute inset-0 shimmer opacity-40" aria-hidden />
