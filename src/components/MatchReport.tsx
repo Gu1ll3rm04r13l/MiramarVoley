@@ -23,17 +23,17 @@ export default function MatchReport({ match, report, players }: { match: Match; 
         </div>
       </header>
 
-      {report.mvp_nombre && (
+      {match.mvp_nombre && (
         <MvpCard
-          nombre={report.mvp_nombre}
-          posicion={report.mvp_posicion}
-          num={report.mvp_num}
-          foto={report.mvp_foto}
+          nombre={match.mvp_nombre}
+          posicion={match.mvp_posicion}
+          num={match.mvp_num}
+          foto={match.mvp_foto}
         />
       )}
 
       <section className="grid gap-3 sm:grid-cols-3">
-        {([["MVP", d.mejorRendimiento], ["Menor", d.menorRendimiento], ["Mejor sacador", d.mejorSacador]] as const).map(([label, dd]) => (
+        {([["Mejor rendimiento", d.mejorRendimiento], ["Menor", d.menorRendimiento], ["Mejor sacador", d.mejorSacador]] as const).map(([label, dd]) => (
           <div key={label} className="rounded-lg bg-navy/50 p-4">
             <p className="text-xs uppercase tracking-wide text-acero">{label}</p>
             {dd ? (

@@ -23,6 +23,11 @@ export function esMiramar(equipo: string | null | undefined): boolean {
   return !!equipo && /miramar/i.test(equipo);
 }
 
+// Equipo rival de Miramar en un partido (el que no es Miramar). Si ninguno lo es, devuelve el local.
+export function rivalDeMiramar(match: { local: string; visitante: string }): string {
+  return esMiramar(match.local) ? match.visitante : match.local;
+}
+
 export function normalizeClub(name: string, aliases: Map<string, string>): string {
   const trimmed = name.trim();
   return aliases.get(trimmed) ?? trimmed;

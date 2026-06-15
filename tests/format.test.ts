@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getDorsal } from "@/lib/format";
+import { getDorsal, rivalDeMiramar } from "@/lib/format";
 import { isMiramar, normalizeName } from "@/lib/format";
 import { normalizeClub, matchReportPlayer } from "@/lib/format";
 
@@ -123,5 +123,17 @@ describe("aggregateReportStats", () => {
     const r = aggregateReportStats(rows);
     expect(r.partidos).toBe(1);
     expect(r.saq).toBe(50);
+  });
+});
+
+describe("rivalDeMiramar", () => {
+  it("devuelve el visitante cuando Miramar es local", () => {
+    expect(rivalDeMiramar({ local: "MIRAMAR V", visitante: "QUILMES A" })).toBe("QUILMES A");
+  });
+  it("devuelve el local cuando Miramar es visitante", () => {
+    expect(rivalDeMiramar({ local: "SUDAMÉRICA", visitante: "MIRAMAR VOLEY" })).toBe("SUDAMÉRICA");
+  });
+  it("cae al local si ninguno es Miramar", () => {
+    expect(rivalDeMiramar({ local: "A", visitante: "B" })).toBe("A");
   });
 });

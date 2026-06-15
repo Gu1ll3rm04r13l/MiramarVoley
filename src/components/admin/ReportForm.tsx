@@ -86,16 +86,6 @@ export default function ReportForm({
       </fieldset>
 
       <fieldset>
-        <legend className="font-display font-bold mb-2">Jugador del partido (MVP)</legend>
-        <div className="grid sm:grid-cols-4 gap-3">
-          <label className="text-sm sm:col-span-2">Nombre<input className={input} value={draft.mvp_nombre ?? ""} onChange={(e) => setField("mvp_nombre", e.target.value || null)} placeholder="Ej: Rodrigo Pérez" /></label>
-          <label className="text-sm">Posición<input className={input} value={draft.mvp_posicion ?? ""} onChange={(e) => setField("mvp_posicion", e.target.value || null)} placeholder="Punta" /></label>
-          <label className="text-sm">Número<input className={input} value={numStr(draft.mvp_num ?? null)} onChange={(e) => setField("mvp_num", toNum(e.target.value))} placeholder="2" /></label>
-          <label className="text-sm sm:col-span-4">Foto (URL, opcional)<input className={input} value={draft.mvp_foto ?? ""} onChange={(e) => setField("mvp_foto", e.target.value || null)} placeholder="https://…" /></label>
-        </div>
-      </fieldset>
-
-      <fieldset>
         <legend className="font-display font-bold mb-2">Jugadores</legend>
         <PlayerStatsGrid rows={draft.jugadores} onChange={(rows) => setField("jugadores", rows)} />
       </fieldset>
