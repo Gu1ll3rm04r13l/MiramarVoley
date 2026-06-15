@@ -18,9 +18,12 @@ export default function MvpCard({
   if (foto) {
     return (
       <section className="flyer-navy grid place-items-center rounded-2xl border border-azul-bright/25 p-3 sm:p-4">
-        <div className="relative aspect-[2/3] w-full max-w-sm overflow-hidden rounded-xl">
-          <Image src={foto} alt={`MVP ${nombre}`} fill sizes="(min-width:640px) 24rem, 100vw" className="object-contain" />
-        </div>
+        {/* <img> normal (no next/image) a propósito: la URL la pega el usuario a mano
+            (bucket, ruta local, lo que sea). Así cualquier host funciona sin tocar
+            next.config y una URL inválida nunca tumba la home. Cada flyer respeta su
+            proporción real. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={foto} alt={`MVP ${nombre}`} loading="lazy" className="w-full max-w-sm rounded-xl" />
       </section>
     );
   }
