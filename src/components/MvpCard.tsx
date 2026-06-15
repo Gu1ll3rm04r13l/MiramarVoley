@@ -13,6 +13,18 @@ export default function MvpCard({
   num: number | null;
   foto: string | null;
 }) {
+  // Si hay flyer (imagen ya diseñada por el club), se muestra entero, sin recortar
+  // ni superponer texto: el flyer ya trae nombre/posición/rival horneados.
+  if (foto) {
+    return (
+      <section className="flyer-navy grid place-items-center rounded-2xl border border-azul-bright/25 p-3 sm:p-4">
+        <div className="relative aspect-[2/3] w-full max-w-sm overflow-hidden rounded-xl">
+          <Image src={foto} alt={`MVP ${nombre}`} fill sizes="(min-width:640px) 24rem, 100vw" className="object-contain" />
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="flyer-navy relative overflow-hidden rounded-2xl border border-azul-bright/25">
       {/* trazo de pincel diagonal de fondo */}
