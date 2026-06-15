@@ -43,8 +43,13 @@ export default function MatchForm({ matches, divisions }: { matches: Match[]; di
     };
     const res = await upsertMatch(payload);
     setSaving(false);
-    setMsg(res.ok ? "Guardado." : `Error: ${res.error}`);
-    if (res.ok) router.refresh();
+    if (res.ok) {
+      const warn = res.warnings?.length ? ` ⚠ ${res.warnings.join(" ")}` : "";
+      setMsg(`Guardado.${warn}`);
+      router.refresh();
+    } else {
+      setMsg(`Error: ${res.error}`);
+    }
   }
 
   const input = "w-full rounded bg-navy border border-acero/30 px-2 py-1.5 text-sm";
