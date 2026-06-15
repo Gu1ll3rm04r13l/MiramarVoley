@@ -22,6 +22,7 @@ function fechaCorta(iso: string | null): string {
 /** Carrusel mobile-first de MVPs: swipe (scroll-snap) + flechas desktop + dots + auto-avance. */
 export default function MvpCarousel({ slides }: { slides: MvpSlide[] }) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const settleTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [active, setActive] = useState(0);
 
   // auto-avance cada 5s (off si hay 1 solo slide o prefers-reduced-motion)
@@ -43,19 +44,25 @@ export default function MvpCarousel({ slides }: { slides: MvpSlide[] }) {
     setActive((i) => (i + dir + slides.length) % slides.length);
   }
 
+  // Solo sincroniza el índice cuando el scroll se FRENA (debounce). Si lo hiciéramos
+  // a mitad del scroll programático de las flechas, leería una posición intermedia y
+  // volvería al slide anterior, peleando con la animación ("se mueve pero no cambia").
   function onScroll() {
     const track = trackRef.current;
     if (!track) return;
-    // El track tiene gap entre slides, así que el offset real de cada slide no es
-    // múltiplo de clientWidth. Elegimos el slide cuyo offsetLeft está más cerca del scroll.
-    const children = Array.from(track.children) as HTMLElement[];
-    if (children.length === 0) return;
-    const nearest = children.reduce(
-      (best, c, idx) =>
-        Math.abs(c.offsetLeft - track.scrollLeft) < Math.abs(children[best].offsetLeft - track.scrollLeft) ? idx : best,
-      0,
-    );
-    setActive(nearest);
+    if (settleTimer.current) clearTimeout(settleTimer.current);
+    settleTimer.current = setTimeout(() => {
+      // El track tiene gap entre slides: el offset real no es múltiplo de clientWidth.
+      // Elegimos el slide cuyo offsetLeft está más cerca del scroll ya frenado.
+      const children = Array.from(track.children) as HTMLElement[];
+      if (children.length === 0) return;
+      const nearest = children.reduce(
+        (best, c, idx) =>
+          Math.abs(c.offsetLeft - track.scrollLeft) < Math.abs(children[best].offsetLeft - track.scrollLeft) ? idx : best,
+        0,
+      );
+      setActive(nearest);
+    }, 120);
   }
 
   return (
